@@ -193,9 +193,13 @@ Integration tests use **Testcontainers** to spin up a real PostgreSQL instance. 
 
 ---
 
-## 2. Performing Tests Through the Frontend
+## 2. Performing Manual Tests
 
-You can manually verify every requirement using the provided React frontend at **http://localhost:3000** (Log in as `alice` / `password`).
+You can manually verify all functional requirements and system behaviors using either:
+1. **The React Frontend:** Available at **http://localhost:3000** (Log in as `alice` / `password`).
+2. **Swagger UI / OpenAPI:** Available at **http://localhost:8080/swagger-ui.html** (Use `alice` in the `X-Username` header where required).
+
+*(Note: For the automated integration test suite, please refer to [Section 1](#1-running-tests-in-terminal) above).*
 
 ### Functional Requirements
 
