@@ -33,7 +33,7 @@ git clone https://github.com/eduymil/Symphony.git
 cd Symphony
 ```
 
-### Run with Docker Compose (Recommended)
+### Run with Docker Compose
 
 ```bash
 docker compose up --build
