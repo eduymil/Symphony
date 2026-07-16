@@ -1,0 +1,26 @@
+services:
+  db-test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ledger
+      POSTGRES_USER: ledger
+      POSTGRES_PASSWORD: ledger
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ledger" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend-test:
+    build:
+      context: ./backend
+      target: build
+    environment:
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-test:5432/ledger
+      SPRING_DATASOURCE_USERNAME: ledger
+      SPRING_DATASOURCE_PASSWORD: ledger
+    depends_on:
+      db-test:
+        condition: service_healthy
+    command: mvn test

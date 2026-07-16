@@ -165,33 +165,24 @@ Full interactive documentation available at **http://localhost:8080/swagger-ui.h
 
 ---
 
-## 1. Running Tests in Terminal
+## 1. Running Tests
 
-### Prerequisites to run tests natively:
-1. **Java 21+** installed on your machine (to run the Maven wrapper).
-2. **Docker** running in the background (Testcontainers uses it to spin up a temporary PostgreSQL database).
+The test suite is fully containerized using Docker Compose to ensure consistency across different operating systems.
 
-To run the integration tests, open your terminal and run the appropriate command for your operating system:
+### Prerequisites:
+- **Docker & Docker Compose** installed and running on your machine.
 
-**Mac / Linux:**
+To run the integration tests, open your terminal at the repository root and run:
+
 ```bash
-cd backend
-./mvnw test
+docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
 ```
 
-**Windows (Command Prompt / PowerShell):**
-```cmd
-cd backend
-.\mvnw.cmd test
-```
-
-### Alternative: Run entirely in Docker (No Java required)
-If you or your reviewer do not want to install Java on your host machine, you can run the test suite via a Dockerized Maven container. *(Note: Docker Desktop must still be running).*
-
-*On Windows (PowerShell/WSL) or Mac:*
-```bash
-docker run --rm -v "${PWD}:/app" -v /var/run/docker.sock:/var/run/docker.sock -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal -w /app/backend maven:3.9-eclipse-temurin-21 mvn test
-```
+This command will:
+1. Spin up a temporary PostgreSQL test database.
+2. Build a test container for the backend.
+3. Run the complete Maven test suite against the test database.
+4. Automatically tear down the containers when the tests finish.
 
 ### Test Coverage
 
