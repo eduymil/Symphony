@@ -12,8 +12,8 @@ A full-stack financial ledger system that records account transactions and maint
 - [Architecture](#architecture)
 - [Design Decisions](#design-decisions)
 - [API Reference](#api-reference)
-- [1. Running Tests in Terminal](#1-running-tests-in-terminal)
-- [2. Performing Tests Through the Frontend](#2-performing-tests-through-the-frontend)
+- [1. Running Tests](#1-running-tests)
+- [2. Performing Manual Tests](#2-performing-manual-tests)
 - [Debug Endpoints](#debug-endpoints)
 - [Assumptions](#assumptions)
 - [Design Decisions & Trade-offs](#design-decisions--trade-offs)
@@ -111,7 +111,7 @@ Each transaction captures the exchange rate at the time of transfer. If exchange
 For ledger verification and reconciliation, we don't compare total sums (which would be incorrect due to exchange rate changes). Instead, we replay every transaction from the initial seeded balance, applying each transaction's stored amounts to recalculate what the balance should be.
 
 ### 5. Idempotency via Database Unique Constraint
-The `idempotency_key` column has a unique constraint. When a duplicate request arrives, we find the existing transaction by key and return it. This provides exactly-once semantics even under concurrent retries.
+The `idempotency_key` column has a unique constraint. When a duplicate request arrives, we find the existing transaction by key and return it. If concurrent duplicate retries are received simultaneously, the database constraint strictly prevents double-processing, and the system gracefully recovers the successful transaction.
 
 ### 6. BigDecimal with Scale 4
 All monetary amounts use `BigDecimal(19, 4)` to avoid floating-point precision issues. Exchange rates use `BigDecimal(19, 8)` for finer precision.

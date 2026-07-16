@@ -173,6 +173,12 @@ public class TransactionService {
         Account sourceAccount = original.getSourceAccountId().equals(firstId) ? firstAccount : secondAccount;
         Account destAccount = original.getDestAccountId().equals(firstId) ? firstAccount : secondAccount;
 
+        // Verify ownership — user must own at least one of the accounts involved
+        if (!sourceAccount.getUser().getUsername().equals(authenticatedUsername) &&
+            !destAccount.getUser().getUsername().equals(authenticatedUsername)) {
+            throw new SecurityException("You can only reverse transactions involving your own accounts");
+        }
+
         // Reverse: credit source, debit destination (using original amounts and exchange rate)
         // Allow negative balance on reversal
         sourceAccount.setBalance(sourceAccount.getBalance().add(original.getSourceAmount()));
